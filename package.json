@@ -13,7 +13,8 @@
     "express": "^4.15.3",
     "google-spreadsheet": "^2.0.4",
     "async": "^2.4.1",
-    "promise": "^7.2.0"
+    "promise": "^7.2.0",
+    "socket.io": "^2.0.3"
   },
   "engines": {
     "node": "8.1.x"
