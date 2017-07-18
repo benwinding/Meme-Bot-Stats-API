@@ -5,13 +5,15 @@ var creds_json = {
   private_key: process.env.private_key,
 }
 
+var totalRows = 12;
+
 exports.GetTable = function (){
   return new Promise((resolve) => {
     GetSpreadsheetDoc()
     .then((res) => Authenticate(res))
     .then((doc) => PrintInfo(doc))
     .then((doc) => GetSheetFromDoc(doc, 0))
-    .then((sheet) => GetTable(sheet,6, 2))
+    .then((sheet) => GetTable(sheet,totalRows, 2))
     .then((table) => SimplifyTable(table))
     .then((sTable) => {
       resolve(sTable);
@@ -24,7 +26,7 @@ exports.SetCounter = function (key, newCount){
   .then((res) => Authenticate(res))
   .then((doc) => PrintInfo(doc))
   .then((doc) => GetSheetFromDoc(doc, 0))
-  .then((sheet) => GetTable(sheet,6, 2))
+  .then((sheet) => GetTable(sheet,totalRows, 2))
   .then((table) => SetKey(table, key, newCount))
   .then((table) => SimplifyTable(table))
 }
@@ -35,7 +37,7 @@ exports.IncrementCounter = function (key){
     .then((res) => Authenticate(res))
     .then((doc) => PrintInfo(doc))
     .then((doc) => GetSheetFromDoc(doc, 0))
-    .then((sheet) => GetTable(sheet,6, 2))
+    .then((sheet) => GetTable(sheet,totalRows, 2))
     .then((table) => IncrementKey(table, key))
     .then((table) => SimplifyTable(table))
     .then((sTable) => {
@@ -50,7 +52,7 @@ exports.GetCount = function (key){
     .then((res) => Authenticate(res))
     .then((doc) => PrintInfo(doc))
     .then((doc) => GetSheetFromDoc(doc, 0))
-    .then((sheet) => GetTable(sheet,6, 2))
+    .then((sheet) => GetTable(sheet,totalRows, 2))
     .then((table) => SimplifyTable(table))
     .then((sTable) => {
       resolve(sTable[key]);

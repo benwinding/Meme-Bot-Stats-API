@@ -2,8 +2,9 @@
 // where your node app starts
 
 // init project
-var express = require('express');
-var app = express();
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 // SPREAD SHEET STUFF
 const memelog = require('./meme-log');
@@ -21,6 +22,18 @@ app.get("/increment/:label", function (request, response) {
 app.get("/value/:label", function (request, response) {
   memelog.GetCount(request.params.label)
     .then((countVal) => response.send(countVal))
+});
+
+let delay2 = (time) => (result) => new Promise(resolve => setTimeout(() => resolve(result), time));
+
+app.get("/longpoll/:label", function (request, response) {
+  memelog.GetCount(request.params.label)
+  .then(function (){
+    return delay2(10000);
+  })
+  .then(function (){
+    return response.send("countccssssscVl");
+  });
 });
 
 // listen for requests :)
