@@ -5,7 +5,7 @@ var creds_json = {
   private_key: process.env.private_key,
 }
 
-var totalRows = 12;
+var totalRows = 14;
 
 exports.GetTable = function (){
   return new Promise((resolve) => {
@@ -140,6 +140,8 @@ function SetKey(table, key, value) {
 function IncrementKey(table, key) {
   return new Promise(function (resolve, reject){
     log("Incrementing key:" +  key);
+    if(!table[key])
+      key = "meme";
     table[key].value = Number(table[key].value) + 1; 
     log("Saving result");
     table[key].save();
