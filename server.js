@@ -2,35 +2,41 @@
 // where your node app starts
 
 // init project
-var app = require('express')();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+const app = require('express')();
+const server = require('http').Server(app);
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
 
 // SPREAD SHEET STUFF
 const memelog = require('./meme-log');
 
-app.get("/", function (request, response) {
-  memelog.GetTable()
-    .then((table) => response.send(table))
+app.get("/", async (request, response) => {
+    try {
+        const table = await memelog.ReturnTable();
+        response.send(table);
+    } catch (err) {
+        response.send(err);
+    }
 });
 
-app.get("/increment/:label", function (request, response) {
-  memelog.IncrementCounter(request.params.label)
-    .then((table) => response.send(table))
+app.get("/increment/:label", (request, response) => {
+    memelog.IncrementCounter(request.params.label)
+        .then((table) => response.send(table))
+        .catch((err) => response.send(err));
 });
 
-app.get("/value/:label", function (request, response) {
-  memelog.GetCount(request.params.label)
-    .then((countVal) => response.send(countVal))
+app.get("/value/:label", (request, response) => {
+    memelog.GetCount(request.params.label)
+        .then((countVal) => response.send(countVal))
+        .catch((err) => response.send(err));
 });
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+    console.log('Your app is listening on port ' + port);
 });
