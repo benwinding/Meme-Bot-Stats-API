@@ -1,8 +1,15 @@
 const DEBUG = true;
 const GoogleSpreadsheet = require('google-spreadsheet');
+
+function getPrivateKey() {
+    const key = process.env.private_key;
+    const keyParsed = key.replace(/\\n/g, '\n');
+    return keyParsed;
+}
+
 const creds_json = {
     client_email: process.env.client_email,
-    private_key: process.env.private_key,
+    private_key: getPrivateKey(),
 };
 
 const totalRows = 14;
@@ -19,7 +26,7 @@ function ReturnTable() {
         .then((doc) => PrintInfo(doc))
         .then((doc) => GetSheetFromDoc(doc, 0))
         .then((sheet) => GetTable(sheet, totalRows, 2))
-        // .then((table) => SimplifyTable(table))
+        .then((table) => SimplifyTable(table))
         .then((sTable) => Promise.resolve(sTable))
         .catch((err) => Promise.reject("!GetTable failed: " + err));
 }
@@ -130,7 +137,7 @@ function IncrementKey(table, key) {
         log("Incrementing key:" +  key);
         if(!table[key]) {
             reject(`No key named: '${key}'`);
-            logErr("! Error GetTable: " + err.toString());
+            logErr("! Error IncrementKey, no key named: " + key);
             return;
         }
         table[key].value = Number(table[key].value) + 1;
