@@ -1,8 +1,15 @@
 const DEBUG = true;
 const GoogleSpreadsheet = require('google-spreadsheet');
+
+function getPrivateKey() {
+    const key = process.env.private_key;
+    const keyParsed = key.replace(/\\n/g, '\n');
+    return keyParsed;
+}
+
 const creds_json = {
     client_email: process.env.client_email,
-    private_key: process.env.private_key,
+    private_key: getPrivateKey(),
 };
 
 const totalRows = 14;
