@@ -19,7 +19,7 @@ function ReturnTable() {
         .then((doc) => PrintInfo(doc))
         .then((doc) => GetSheetFromDoc(doc, 0))
         .then((sheet) => GetTable(sheet, totalRows, 2))
-        // .then((table) => SimplifyTable(table))
+        .then((table) => SimplifyTable(table))
         .then((sTable) => Promise.resolve(sTable))
         .catch((err) => Promise.reject("!GetTable failed: " + err));
 }
@@ -130,7 +130,7 @@ function IncrementKey(table, key) {
         log("Incrementing key:" +  key);
         if(!table[key]) {
             reject(`No key named: '${key}'`);
-            logErr("! Error GetTable: " + err.toString());
+            logErr("! Error IncrementKey, no key named: " + key);
             return;
         }
         table[key].value = Number(table[key].value) + 1;
